@@ -1,34 +1,25 @@
-# UT-Course-Availability-Tracker
+# UT Automatic Course Adder
+Based off https://github.com/christiandipert/UT-Course-Availability-Tracker
 
-Are you a UT Austin student TIRED of not getting your classes??? Are you someone that hates classes that don't have waitlists and wish you could hire a team of 1000 to constantly monitor a closed class in case it opens up so you can snipe a spot??? HAVE NO FEAR! This script allows you to constantly refresh the status of a current course as well as get the status of past courses. SNIPE your classes with EASE.
+A script that runs in the background until a class opens up and automatically tries to add the class to your schedule. If there is a waitlist for the class, it will join the waitlist and set the swap class that you provide. You can also drop upon successful add if you need to replace a class.
 
-You can view a demo video here: https://youtu.be/WT6Vrt1dYLk
+# How to Use
+Download and run the Python file using the command line or an IDE. The script will open a window that asks for whether you want to only add a class or drop upon successful add. Then, it will ask you for the Unique numbers of the classes you want to add, drop, or swap, the season and year you are registering for, and whether you want the Chrome tab to be minimized or not. After this, you will need to login with your UTEID and authenticate with Duo. Finally, the script will automatically refresh until the class is open and open up your registration page to add the classes and join the waitlist if needed. Make sure to check whether the courses were actually added by looking at your registration page and also looking at the terminal.
 
-# NOTE:
-This script is in EARLY TESTING and ONLY WORKS IF DUO MOBILE IS SET TO CALL YOU! OTHERWISE it will NOT WORK! I am working to hopefully add functionality for mobile app users and text message users.
+# Running the program:
 
-# Key Features:
-
-- Specifically tailored for the UT course system.
-- Allows you to 'snipe' non-waitlisted classes that randomly open and close.
-- Customizable settings to meet individual preferences and needs.
-
-### Usage:
-
-To get started, first install the dependencies required for the script:
+Install the libraries required for the script:
 ```python
-pip install -r requirements.txt
+pip install selenium
 ```
 
-Then, create a file titled "credentials.py" with the following format:
+To run the script, type this into your terminal or run it from an IDE with:
 ```python
-USERNAME='your_UT_eid_here'
-PASSWORD='your_password_here'
+python courseTrack.py
 ```
-
-To run the script, simply navigate to the command line and run:
+or
 ```python
-python courseTrack.py -h
+python3 courseTrack.py
 ```
 
 
