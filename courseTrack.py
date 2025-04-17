@@ -62,13 +62,26 @@ def getStatus(SEASON, YEAR, show_gui, refresh_interval):
 def goToRegistrationPage(driver):
     driver.maximize_window()
     registrationURL = "https://utdirect.utexas.edu/registration/chooseSemester.WBX"
-    #driver.get(registrationURL)
     newDriver = driver
     newDriver.get(registrationURL)
+    
+    # Determine button text based on season and year
+    season_display = "Fall" if SEASON.lower() == "fall" else "Summer" if SEASON.lower() == "spring" else SEASON.capitalize()
+    button_text = f"{season_display} {YEAR} Registration"
+    
+    # Wait for the submit buttons to be present
     WebDriverWait(newDriver, 20).until(
         EC.presence_of_element_located((By.XPATH, "//form//input[@name='submit']"))
     )
-    newDriver.find_element(By.XPATH, "//form//input[@name='submit']").click()
+    
+    # Find and click the button that matches the season and year
+    try:
+        registration_button = newDriver.find_element(By.XPATH, f"//form//input[@name='submit'][@value='{button_text}']")
+        registration_button.click()
+    except:
+        print(f"Could not find registration button for {button_text}. Attempting to use the first available button.")
+        newDriver.find_element(By.XPATH, "//form//input[@name='submit']").click()
+    
     WebDriverWait(newDriver, 10).until(EC.presence_of_element_located((By.ID, "s_unique_add")))
     if DROP_ADD:
         drop_dropdown = driver.find_element(By.ID, "s_swap_unique_drop")
@@ -105,7 +118,7 @@ def goToRegistrationPage(driver):
         
 
 def main():
-    global UNIQUE_ID, SWAP_NUMBER, DROP_ADD, DROP_ID
+    global UNIQUE_ID, SWAP_NUMBER, DROP_ADD, DROP_ID, SEASON, YEAR
     DROP_ADD = simpledialog.askstring("courseTrack", "Would you like to add a class or drop upon successful add? (Enter 'Add' or 'Drop on Add')")
     assert DROP_ADD == "Add" or DROP_ADD == "Drop on Add"
     DROP_ADD = DROP_ADD == "Drop on Add"
@@ -138,12 +151,12 @@ def main():
         DROP_ID = int(DROP_ID)
         assert DROP_ID >= 10000 and DROP_ID <= 99999
     SWAP_NUMBER = int(SWAP_NUMBER)
-    year = int(year)
-    refresh_interval = 15
+    YEAR = int(year)
+    SEASON = season.lower()
+    refresh_interval = 10
     show_gui = True if show_gui == "Y" else False
     assert UNIQUE_ID >= 10000 and UNIQUE_ID <= 99999
-    season = season.lower()
-    assert season == "fall" or season == "spring"
+    assert SEASON == "fall" or SEASON == "spring"
     assert SWAP_NUMBER == 0 or (SWAP_NUMBER >= 10000 and SWAP_NUMBER <= 99999)
     
     # Schedule the window to close after inputs are gathered
@@ -152,7 +165,7 @@ def main():
 
     # Start the Tkinter event loop to handle inputs
     root.mainloop()
-    getStatus(season, year, show_gui, refresh_interval)
+    getStatus(SEASON, YEAR, show_gui, refresh_interval)
 
 
 if __name__ == "__main__":
