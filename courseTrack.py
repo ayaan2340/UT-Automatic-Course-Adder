@@ -45,6 +45,7 @@ def getStatus(SEASON, YEAR, show_gui, refresh_interval):
         except:
             driver.get(login_url)
             if(useCreds):
+                print("Attempting relogin, link must have timed out")
                 driver.find_element(By.ID, "username").send_keys(username)
                 driver.find_element(By.ID, "password").send_keys(password)
                 driver.find_element(By.NAME, "_eventId_proceed").click()
